@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>健康知识抽卡机</title>
+  <style>
+    body { font-family: system-ui, "Microsoft YaHei", sans-serif; max-width: 560px; margin: 40px auto; padding: 0 16px; color: #222; }
+    h1 { font-size: 26px; margin-bottom: 4px; }
+    .sub { color: #666; font-size: 14px; margin-top: 0; }
+    button { font-size: 16px; padding: 10px 20px; border-radius: 8px; border: 1px solid #999; background: #fff; cursor: pointer; }
+    button:active { background: #f3f4f6; }
+    .card { padding: 16px 18px; border-radius: 10px; margin: 16px 0; font-size: 17px; line-height: 1.6; }
+    .r   { background: #e5e7eb; }
+    .sr  { background: #bfdbfe; }
+    .ssr { background: #fde68a; }
+    #log { color: #666; font-size: 14px; }
+    footer { margin-top: 32px; color: #999; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>健康知识抽卡机</h1>
+  <p class="sub">点一下抽一张健康冷知识卡，越稀有越难抽到。</p>
+  <button onclick="draw()">抽一张</button>
+  <div id="out"></div>
+  <p id="log">还没抽过。R 70% / SR 25% / SSR 5%</p>
+
+  <footer>个人练习项目 · HTML + CSS + JavaScript</footer>
+
+  <script>
+    // 卡池：档位 → 文案列表。加卡就往这里加一行。
+    const pool = {
+      R: [
+        "久坐 1 小时，起身活动 3 分钟。",
+        "每天 5 份蔬果，与更低的全因死亡率相关。",
+        "成人每天食盐建议不超过 5 克。",
+        "晚上关灯后看手机，会影响入睡质量。",
+      ],
+      SR: [
+        "成人每周推荐 150 分钟中等强度运动。",
+        "家庭连续测血压，比单次门诊测量更真实。",
+        "接种流感疫苗后约 2 周开始产生保护力。",
+      ],
+      SSR: [
+        "洗手 20 秒，约等于唱两遍生日歌。",
+        "控烟是最具成本效益的公共卫生措施之一。",
+      ],
+    };
+
+    let total = 0;
+    let ssrCount = 0;
+
+    // 权重 70 / 25 / 5 抽档位
+    function pickRank() {
+      const r = Math.random() * 100;
+      if (r < 70) return "R";
+      if (r < 95) return "SR";
+      return "SSR";
+    }
+
+    function draw() {
+      const rank = pickRank();
+      const list = pool[rank];
+      const text = list[Math.floor(Math.random() * list.length)];
+
+      total += 1;
+      if (rank === "SSR") ssrCount += 1;
+
+      document.getElementById("out").innerHTML =
+        `<div class="card ${rank.toLowerCase()}">【${rank}】${text}</div>`;
+      document.getElementById("log").textContent =
+        `已抽 ${total} 张，其中 SSR ${ssrCount} 张`;
+    }
+  </script>
+</body>
+</html>
